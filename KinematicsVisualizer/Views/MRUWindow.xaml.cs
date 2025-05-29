@@ -6,6 +6,10 @@ namespace KinematicsVisualizer.Views
 {
     public partial class MRUWindow : Window
     {
+        public MRUWindow() : this(GraphType.PosicionVsTiempo) // valor por defecto
+        {
+        }
+
         public MRUWindow(GraphType tipoGrafica)
         {
             InitializeComponent();

@@ -33,5 +33,7 @@
                        Margin="0,0,0,10"/>
             <Button Content="Volver al Menú" Click="VolverAlMenu" HorizontalAlignment="Right"/>
         </StackPanel>
+        
+        
     </Grid>
 </Window>
