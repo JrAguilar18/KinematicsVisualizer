@@ -1,29 +1,57 @@
-﻿<Window x:Class="KinematicsVisualizer.MainWindow"
+﻿<Window x:Class="KinematicsVisualizer.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:KinematicsVisualizer.ViewModels"
-        xmlns:model="clr-namespace:KinematicsVisualizer.Models"
-        Title="Simulador de Movimiento" Height="350" Width="400"
-        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
-
-    <Window.DataContext>
-        <vm:MainMenuViewModel />
-    </Window.DataContext>
-
+        Title="Kinematics Pro"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        WindowStyle="SingleBorderWindow"
+        >
     <Grid Margin="20">
-        <StackPanel>
-            <TextBlock Text="Tipo de Movimiento:" FontWeight="Bold"/>
-            <ComboBox ItemsSource="{Binding Movimientos}"
-                      SelectedItem="{Binding MovimientoSeleccionado}"
-                      Width="250" Margin="0,10"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Título/Subtítulo -->
+            <RowDefinition Height="Auto"/>
+            <!-- ComboBox -->
+            <RowDefinition Height="*"/>
+            <!-- Canvas de animación -->
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Tipo de Gráfica:" FontWeight="Bold"/>
-            <ComboBox ItemsSource="{Binding GraficasDisponibles}"
-                      SelectedItem="{Binding GraficaSeleccionada}"
-                      Width="250" Margin="0,10"/>
-
-            <Button Content="Iniciar" Click="Iniciar_Click"
-                    Width="100" Height="30" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+        <StackPanel Grid.Row="0"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="0,60,0,40">
+            <TextBlock Text="Kinematics Pro"
+               FontSize="60"
+               FontWeight="Bold"
+               Foreground="#2C3E50"
+               TextAlignment="Center"
+               Margin="0,0,0,10"/>
+            <TextBlock Text="Tu calculadora de cinemática"
+               FontSize="26"
+               FontWeight="SemiBold"
+               Foreground="#7F8C8D"
+               TextAlignment="Center"/>
         </StackPanel>
+
+        <!-- ComboBox de selección -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <TextBlock Text="Elige un movimiento:" FontSize="16" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <ComboBox Width="200"
+                      FontSize="14"
+                      Name="MovimientoCombo"
+                      SelectionChanged="MovimientoCombo_SelectionChanged">
+                <ComboBoxItem Content="MRU"/>
+                <ComboBoxItem Content="MRUA"/>
+                <ComboBoxItem Content="Caída Libre"/>
+                <ComboBoxItem Content="Tiro Vertical"/>
+                <ComboBoxItem Content="Tiro Parabólico"/>
+            </ComboBox>
+        </StackPanel>
+
+        <!-- Canvas animado -->
+        <Canvas x:Name="AnimacionCanvas"
+                Grid.Row="2"
+                Background="White"
+                ClipToBounds="True"/>
     </Grid>
 </Window>

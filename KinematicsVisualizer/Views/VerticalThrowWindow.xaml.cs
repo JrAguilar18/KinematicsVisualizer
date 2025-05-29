@@ -6,6 +6,9 @@ namespace KinematicsVisualizer.Views
 {
     public partial class VerticalThrowWindow : Window
     {
+        public VerticalThrowWindow() : this(GraphType.PosicionVsTiempo) // valor por defecto
+        {
+        }
         public VerticalThrowWindow(GraphType tipoGrafica)
         {
             InitializeComponent();
