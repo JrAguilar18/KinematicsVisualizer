@@ -16,11 +16,12 @@ namespace KinematicsVisualizer.Views
 
         private double posX, posY;
         private double velX, velY;
-        private const double gravedad = 980.0; // px/s²
+
+        // Cambia el valor de gravedad global:
+        private const double gravedad = 1200.0;
         private const double damping = 0.7;
         private int rebotes = 0;
         private const int maxRebotes = 4;
-        private const double sueloY = 400;
 
         private DateTime lastUpdateTime;
         private bool esPantallaCompleta = false;
@@ -28,9 +29,15 @@ namespace KinematicsVisualizer.Views
         public MainWindow()
         {
             InitializeComponent();
-            IniciarAnimacion();
-            this.Loaded += (_, __) => this.Focus(); // Captura teclas
+            this.Loaded += (_, __) =>
+            {
+                IniciarAnimacion();
+                this.Focus();
+                lastUpdateTime = DateTime.Now;
+            };
         }
+
+        private double SueloY => AnimacionCanvas.ActualHeight - pelota.Height;
 
         private void IniciarAnimacion()
         {
@@ -50,17 +57,20 @@ namespace KinematicsVisualizer.Views
             AnimacionCanvas.Children.Add(trayectoria);
             AnimacionCanvas.Children.Add(pelota);
 
-            // Valores iniciales
-            posX = 50;
-            posY = 0;
-            velX = 180; // px/s
-            velY = -500; // px/s (hacia arriba)
+            // Dentro de IniciarAnimacion()
+            posX = 0;
+            posY = SueloY;
+            velX = 280;    // ← aumentado
+            velY = -850;   // ← aumentado
 
-            lastUpdateTime = DateTime.Now;
+
+            // Posicionar pelota inicialmente
+            Canvas.SetLeft(pelota, posX);
+            Canvas.SetTop(pelota, posY);
 
             timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(16) // ~60 FPS
+                Interval = TimeSpan.FromMilliseconds(16) // ~60fps
             };
             timer.Tick += OnFrame;
             timer.Start();
@@ -77,10 +87,10 @@ namespace KinematicsVisualizer.Views
             posX += velX * deltaTime;
             posY += velY * deltaTime;
 
-            // Rebote contra el "suelo"
-            if (posY >= sueloY)
+            // Rebote contra el suelo
+            if (posY >= SueloY)
             {
-                posY = sueloY;
+                posY = SueloY;
                 velY = -velY * damping;
                 rebotes++;
 
@@ -91,12 +101,19 @@ namespace KinematicsVisualizer.Views
                 }
             }
 
+            // Límite derecho (opcional)
+            if (posX >= AnimacionCanvas.ActualWidth - pelota.Width)
+            {
+                timer.Stop();
+                return;
+            }
+
             // Dibujar trayectoria
             trayectoria.Points.Add(new Point(posX, posY));
 
-            // Posicionar la pelota
-            Canvas.SetLeft(pelota, posX - pelota.Width / 2);
-            Canvas.SetTop(pelota, posY - pelota.Height / 2);
+            // Actualizar posición de la pelota
+            Canvas.SetLeft(pelota, posX);       // ✅ No compensamos el centro
+            Canvas.SetTop(pelota, posY);        // ✅ Rebote visual desde el borde
         }
 
         private void MovimientoCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
