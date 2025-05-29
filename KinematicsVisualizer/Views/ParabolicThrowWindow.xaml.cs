@@ -6,9 +6,6 @@ namespace KinematicsVisualizer.Views
 {
     public partial class ParabolicThrowWindow : Window
     {
-        public ParabolicThrowWindow() : this(GraphType.PosicionVsTiempo) // valor por defecto
-        {
-        }
         public ParabolicThrowWindow(GraphType tipoGrafica)
         {
             InitializeComponent();

@@ -4,12 +4,8 @@ using KinematicsVisualizer.ViewModels;
 
 namespace KinematicsVisualizer.Views
 {
-
     public partial class FreeFallWindow : Window
     {
-        public FreeFallWindow() : this(GraphType.PosicionVsTiempo) // valor por defecto
-        {
-        }
         public FreeFallWindow(GraphType tipoGrafica)
         {
             InitializeComponent();
