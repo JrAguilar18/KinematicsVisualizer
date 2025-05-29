@@ -13,19 +13,23 @@ namespace KinematicsVisualizer.Views
         private Ellipse pelota;
         private Polyline trayectoria;
         private DispatcherTimer timer;
+
         private double posX, posY;
         private double velX, velY;
-        private const double gravedad = 9.8;
-        private const double reboteDamping = 0.7;
-        private int reboteCount = 0;
+        private const double gravedad = 980.0; // px/s²
+        private const double damping = 0.7;
+        private int rebotes = 0;
         private const int maxRebotes = 4;
+        private const double sueloY = 400;
 
-        private DateTime lastFrameTime;
+        private DateTime lastUpdateTime;
+        private bool esPantallaCompleta = false;
 
         public MainWindow()
         {
             InitializeComponent();
             IniciarAnimacion();
+            this.Loaded += (_, __) => this.Focus(); // Captura teclas
         }
 
         private void IniciarAnimacion()
@@ -49,10 +53,10 @@ namespace KinematicsVisualizer.Views
             // Valores iniciales
             posX = 50;
             posY = 0;
-            velX = 100; // píxeles por segundo
-            velY = -180;
+            velX = 180; // px/s
+            velY = -500; // px/s (hacia arriba)
 
-            lastFrameTime = DateTime.Now;
+            lastUpdateTime = DateTime.Now;
 
             timer = new DispatcherTimer
             {
@@ -64,24 +68,23 @@ namespace KinematicsVisualizer.Views
 
         private void OnFrame(object sender, EventArgs e)
         {
-            // Δt real
-            var now = DateTime.Now;
-            double dt = (now - lastFrameTime).TotalSeconds;
-            lastFrameTime = now;
+            DateTime now = DateTime.Now;
+            double deltaTime = (now - lastUpdateTime).TotalSeconds;
+            lastUpdateTime = now;
 
             // Física
-            velY += gravedad * 100 * dt; // gravedad en px/s²
-            posX += velX * dt;
-            posY += velY * dt;
+            velY += gravedad * deltaTime;
+            posX += velX * deltaTime;
+            posY += velY * deltaTime;
 
-            // Rebote
-            if (posY >= 250)
+            // Rebote contra el "suelo"
+            if (posY >= sueloY)
             {
-                posY = 250;
-                velY = -velY * reboteDamping;
-                reboteCount++;
+                posY = sueloY;
+                velY = -velY * damping;
+                rebotes++;
 
-                if (reboteCount >= maxRebotes)
+                if (rebotes >= maxRebotes)
                 {
                     timer.Stop();
                     return;
@@ -91,7 +94,7 @@ namespace KinematicsVisualizer.Views
             // Dibujar trayectoria
             trayectoria.Points.Add(new Point(posX, posY));
 
-            // Mover pelota
+            // Posicionar la pelota
             Canvas.SetLeft(pelota, posX - pelota.Width / 2);
             Canvas.SetTop(pelota, posY - pelota.Height / 2);
         }
@@ -118,6 +121,40 @@ namespace KinematicsVisualizer.Views
                 }
             }
         }
+
+        private void OnKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.F11)
+            {
+                TogglePantallaCompleta();
+            }
+            else if (e.Key == Key.Escape && esPantallaCompleta)
+            {
+                SalirDePantallaCompleta();
+            }
+        }
+
+        private void TogglePantallaCompleta()
+        {
+            if (!esPantallaCompleta)
+            {
+                this.WindowStyle = WindowStyle.None;
+                this.WindowState = WindowState.Maximized;
+                this.ResizeMode = ResizeMode.NoResize;
+                esPantallaCompleta = true;
+            }
+            else
+            {
+                SalirDePantallaCompleta();
+            }
+        }
+
+        private void SalirDePantallaCompleta()
+        {
+            this.WindowStyle = WindowStyle.SingleBorderWindow;
+            this.WindowState = WindowState.Normal;
+            this.ResizeMode = ResizeMode.CanResize;
+            esPantallaCompleta = false;
+        }
     }
 }
-

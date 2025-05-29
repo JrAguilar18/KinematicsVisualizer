@@ -5,6 +5,7 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
         WindowStyle="SingleBorderWindow"
+        KeyDown="OnKeyDown"
         >
     <Grid Margin="20">
         <Grid.RowDefinitions>
