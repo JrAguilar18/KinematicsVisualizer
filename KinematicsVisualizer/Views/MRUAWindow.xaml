@@ -1,0 +1,39 @@
+﻿<Window x:Class="KinematicsVisualizer.Views.MRUAWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KinematicsVisualizer.ViewModels"
+        xmlns:scottPlot="clr-namespace:ScottPlot.WPF;assembly=ScottPlot.WPF"
+        Title="MRUA" Height="500" Width="650">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <!-- Inputs -->
+            <RowDefinition Height="*"/>
+            <!-- Gráfica -->
+            <RowDefinition Height="Auto"/>
+            <!-- Ecuación + Botón -->
+        </Grid.RowDefinitions>
+
+        <!-- Inputs -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,10">
+            <TextBlock Text="v₀ (m/s):" VerticalAlignment="Center"/>
+            <TextBox Width="80" Text="{Binding VelocidadInicial}" Margin="10,0"/>
+            <TextBlock Text="a (m/s²):" VerticalAlignment="Center"/>
+            <TextBox Width="80" Text="{Binding Aceleracion}" Margin="10,0"/>
+            <TextBlock Text="t (s):" VerticalAlignment="Center"/>
+            <TextBox Width="80" Text="{Binding Tiempo}" Margin="10,0"/>
+            <Button Content="Graficar" Command="{Binding GraficarCommand}" Margin="20,0"/>
+        </StackPanel>
+
+        <!-- Gráfica -->
+        <scottPlot:WpfPlot x:Name="plot" Grid.Row="1" />
+
+        <!-- Ecuación y botón -->
+        <StackPanel Grid.Row="2" Margin="0,10,0,0">
+            <TextBlock Text="{Binding EcuacionVisible}" FontSize="14" Foreground="DarkSlateGray"
+                       TextWrapping="Wrap" Margin="0,0,0,10" HorizontalAlignment="Center"/>
+            <Button Content="Volver al Menú" Click="VolverAlMenu" HorizontalAlignment="Right"/>
+        </StackPanel>
+    </Grid>
+</Window>

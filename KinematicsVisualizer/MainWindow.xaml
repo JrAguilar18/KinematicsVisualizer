@@ -1,0 +1,29 @@
+﻿<Window x:Class="KinematicsVisualizer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:KinematicsVisualizer.ViewModels"
+        xmlns:model="clr-namespace:KinematicsVisualizer.Models"
+        Title="Simulador de Movimiento" Height="350" Width="400"
+        ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+
+    <Window.DataContext>
+        <vm:MainMenuViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="20">
+        <StackPanel>
+            <TextBlock Text="Tipo de Movimiento:" FontWeight="Bold"/>
+            <ComboBox ItemsSource="{Binding Movimientos}"
+                      SelectedItem="{Binding MovimientoSeleccionado}"
+                      Width="250" Margin="0,10"/>
+
+            <TextBlock Text="Tipo de Gráfica:" FontWeight="Bold"/>
+            <ComboBox ItemsSource="{Binding GraficasDisponibles}"
+                      SelectedItem="{Binding GraficaSeleccionada}"
+                      Width="250" Margin="0,10"/>
+
+            <Button Content="Iniciar" Click="Iniciar_Click"
+                    Width="100" Height="30" HorizontalAlignment="Center" Margin="0,20,0,0"/>
+        </StackPanel>
+    </Grid>
+</Window>
